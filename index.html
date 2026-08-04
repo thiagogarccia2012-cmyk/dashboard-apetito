@@ -103,6 +103,25 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#fafafa;}
       <div class="chart-card"><div class="chart-title">AR &mdash; Proje&ccedil;&atilde;o Semanal de Recebimento</div><canvas id="ch-ar-sem"></canvas></div>
     </div>
 
+    <!-- ── Recebimentos Baixados no Periodo ── -->
+    <div class="section-hdr">&#x1F4B0; Recebimentos Baixados no Per&iacute;odo</div>
+    <div class="tbl-wrap" style="margin-bottom:var(--gap);">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <label style="font-size:12px;color:var(--muted);">De:
+          <input type="date" id="recbaixa-de" style="margin-left:4px;padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:13px;">
+        </label>
+        <label style="font-size:12px;color:var(--muted);">At&eacute;:
+          <input type="date" id="recbaixa-ate" style="margin-left:4px;padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:13px;">
+        </label>
+        <button onclick="aplicarFiltroRecBaixas()" style="padding:7px 20px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;font-weight:600;">Filtrar</button>
+        <span style="font-size:11px;color:var(--muted);">Padr&atilde;o: &uacute;ltimos 30 dias</span>
+      </div>
+    </div>
+    <div class="kpis" style="grid-template-columns:repeat(2,1fr)">
+      <div class="kpi green"><div class="kpi-lbl">Qtd T&iacute;tulos Baixados</div><div class="kpi-val" id="k-recbaixa-qtd"></div><div class="kpi-sub" id="k-recbaixa-sub"></div></div>
+      <div class="kpi green"><div class="kpi-lbl">Valor Baixado no Per&iacute;odo</div><div class="kpi-val" id="k-recbaixa-val"></div><div class="kpi-sub">recebido no per&iacute;odo</div></div>
+    </div>
+
     <!-- ── Creditos Nao Identificados ── -->
     <div class="section-hdr" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
       <span>&#x2753; Cr&eacute;ditos N&atilde;o Identificados</span>
@@ -284,7 +303,7 @@ var INADIMP_RESUMO  = [{"ANO": "2023", "MES_NUM": "1", "MES": "01/2023", "QTD_CL
 var INADIMP_KPI     = [{"CLIENTES": "10178", "TITULOS": "22761", "SALDO_TOTAL": "41976276.64", "SALDO_VENCIDO": "6756752.27", "SALDO_A_VENCER": "35219524.37", "TITULOS_VENCIDOS": "3237"}];
 var INADIMP_AGING   = [{"FAIXA": "A vencer", "ORD": "0", "QTD": "19524", "VALOR_TOTAL": "35219524.37"}, {"FAIXA": "00-07 dias", "ORD": "1", "QTD": "285", "VALOR_TOTAL": "547275.06"}, {"FAIXA": "08-14 dias", "ORD": "2", "QTD": "64", "VALOR_TOTAL": "544843.10"}, {"FAIXA": "15-21 dias", "ORD": "3", "QTD": "59", "VALOR_TOTAL": "103558.39"}, {"FAIXA": "22-30 dias", "ORD": "4", "QTD": "44", "VALOR_TOTAL": "167900.06"}, {"FAIXA": "31-60 dias", "ORD": "5", "QTD": "118", "VALOR_TOTAL": "285162.13"}, {"FAIXA": "61-90 dias", "ORD": "6", "QTD": "135", "VALOR_TOTAL": "316176.32"}, {"FAIXA": "91-120 dias", "ORD": "7", "QTD": "126", "VALOR_TOTAL": "202598.71"}, {"FAIXA": ">120 dias", "ORD": "8", "QTD": "2406", "VALOR_TOTAL": "4589238.50"}];
 var INADIMP_MES     = [{"MES": "03/2020", "QTD": "1", "VALOR_TOTAL": "54.57", "VALOR_VENCIDO": "54.57", "VALOR_A_VENCER": "0"}, {"MES": "04/2020", "QTD": "4", "VALOR_TOTAL": "2552.98", "VALOR_VENCIDO": "2552.98", "VALOR_A_VENCER": "0"}, {"MES": "03/2021", "QTD": "3", "VALOR_TOTAL": "2288.30", "VALOR_VENCIDO": "2288.30", "VALOR_A_VENCER": "0"}, {"MES": "04/2021", "QTD": "1", "VALOR_TOTAL": "692.50", "VALOR_VENCIDO": "692.50", "VALOR_A_VENCER": "0"}, {"MES": "09/2021", "QTD": "1", "VALOR_TOTAL": "571.15", "VALOR_VENCIDO": "571.15", "VALOR_A_VENCER": "0"}, {"MES": "03/2022", "QTD": "1", "VALOR_TOTAL": "1802.64", "VALOR_VENCIDO": "1802.64", "VALOR_A_VENCER": "0"}, {"MES": "06/2022", "QTD": "2", "VALOR_TOTAL": "8031.19", "VALOR_VENCIDO": "8031.19", "VALOR_A_VENCER": "0"}, {"MES": "09/2022", "QTD": "2", "VALOR_TOTAL": "224.70", "VALOR_VENCIDO": "224.70", "VALOR_A_VENCER": "0"}, {"MES": "10/2022", "QTD": "4", "VALOR_TOTAL": "3569.94", "VALOR_VENCIDO": "3569.94", "VALOR_A_VENCER": "0"}, {"MES": "11/2022", "QTD": "2", "VALOR_TOTAL": "834.96", "VALOR_VENCIDO": "834.96", "VALOR_A_VENCER": "0"}, {"MES": "12/2022", "QTD": "32", "VALOR_TOTAL": "39517.79", "VALOR_VENCIDO": "39517.79", "VALOR_A_VENCER": "0"}, {"MES": "01/2023", "QTD": "345", "VALOR_TOTAL": "346651.53", "VALOR_VENCIDO": "346651.53", "VALOR_A_VENCER": "0"}, {"MES": "02/2023", "QTD": "76", "VALOR_TOTAL": "165182.31", "VALOR_VENCIDO": "165182.31", "VALOR_A_VENCER": "0"}, {"MES": "03/2023", "QTD": "49", "VALOR_TOTAL": "70314.42", "VALOR_VENCIDO": "70314.42", "VALOR_A_VENCER": "0"}, {"MES": "04/2023", "QTD": "49", "VALOR_TOTAL": "66883.80", "VALOR_VENCIDO": "66883.80", "VALOR_A_VENCER": "0"}, {"MES": "05/2023", "QTD": "49", "VALOR_TOTAL": "84640.01", "VALOR_VENCIDO": "84640.01", "VALOR_A_VENCER": "0"}, {"MES": "06/2023", "QTD": "27", "VALOR_TOTAL": "84342.31", "VALOR_VENCIDO": "84342.31", "VALOR_A_VENCER": "0"}, {"MES": "07/2023", "QTD": "30", "VALOR_TOTAL": "43786.20", "VALOR_VENCIDO": "43786.20", "VALOR_A_VENCER": "0"}, {"MES": "08/2023", "QTD": "54", "VALOR_TOTAL": "102451.92", "VALOR_VENCIDO": "102451.92", "VALOR_A_VENCER": "0"}, {"MES": "09/2023", "QTD": "27", "VALOR_TOTAL": "51929.50", "VALOR_VENCIDO": "51929.50", "VALOR_A_VENCER": "0"}, {"MES": "10/2023", "QTD": "39", "VALOR_TOTAL": "68842.18", "VALOR_VENCIDO": "68842.18", "VALOR_A_VENCER": "0"}, {"MES": "11/2023", "QTD": "28", "VALOR_TOTAL": "52041.66", "VALOR_VENCIDO": "52041.66", "VALOR_A_VENCER": "0"}, {"MES": "12/2023", "QTD": "45", "VALOR_TOTAL": "125956.74", "VALOR_VENCIDO": "125956.74", "VALOR_A_VENCER": "0"}, {"MES": "01/2024", "QTD": "38", "VALOR_TOTAL": "77045.20", "VALOR_VENCIDO": "77045.20", "VALOR_A_VENCER": "0"}, {"MES": "02/2024", "QTD": "42", "VALOR_TOTAL": "65870.70", "VALOR_VENCIDO": "65870.70", "VALOR_A_VENCER": "0"}, {"MES": "03/2024", "QTD": "24", "VALOR_TOTAL": "24744.38", "VALOR_VENCIDO": "24744.38", "VALOR_A_VENCER": "0"}, {"MES": "04/2024", "QTD": "24", "VALOR_TOTAL": "36977.22", "VALOR_VENCIDO": "36977.22", "VALOR_A_VENCER": "0"}, {"MES": "05/2024", "QTD": "29", "VALOR_TOTAL": "42347.26", "VALOR_VENCIDO": "42347.26", "VALOR_A_VENCER": "0"}, {"MES": "06/2024", "QTD": "35", "VALOR_TOTAL": "59009.94", "VALOR_VENCIDO": "59009.94", "VALOR_A_VENCER": "0"}, {"MES": "07/2024", "QTD": "38", "VALOR_TOTAL": "66182.26", "VALOR_VENCIDO": "66182.26", "VALOR_A_VENCER": "0"}, {"MES": "08/2024", "QTD": "35", "VALOR_TOTAL": "63724.62", "VALOR_VENCIDO": "63724.62", "VALOR_A_VENCER": "0"}, {"MES": "09/2024", "QTD": "59", "VALOR_TOTAL": "96680.46", "VALOR_VENCIDO": "96680.46", "VALOR_A_VENCER": "0"}, {"MES": "10/2024", "QTD": "51", "VALOR_TOTAL": "100762.55", "VALOR_VENCIDO": "100762.55", "VALOR_A_VENCER": "0"}, {"MES": "11/2024", "QTD": "54", "VALOR_TOTAL": "98954.67", "VALOR_VENCIDO": "98954.67", "VALOR_A_VENCER": "0"}, {"MES": "12/2024", "QTD": "86", "VALOR_TOTAL": "204976", "VALOR_VENCIDO": "204976", "VALOR_A_VENCER": "0"}, {"MES": "01/2025", "QTD": "65", "VALOR_TOTAL": "146326.05", "VALOR_VENCIDO": "146326.05", "VALOR_A_VENCER": "0"}, {"MES": "02/2025", "QTD": "72", "VALOR_TOTAL": "236019.27", "VALOR_VENCIDO": "236019.27", "VALOR_A_VENCER": "0"}, {"MES": "03/2025", "QTD": "78", "VALOR_TOTAL": "183650.82", "VALOR_VENCIDO": "183650.82", "VALOR_A_VENCER": "0"}, {"MES": "04/2025", "QTD": "56", "VALOR_TOTAL": "124686.30", "VALOR_VENCIDO": "124686.30", "VALOR_A_VENCER": "0"}, {"MES": "05/2025", "QTD": "42", "VALOR_TOTAL": "78765.32", "VALOR_VENCIDO": "78765.32", "VALOR_A_VENCER": "0"}, {"MES": "06/2025", "QTD": "68", "VALOR_TOTAL": "104209.02", "VALOR_VENCIDO": "104209.02", "VALOR_A_VENCER": "0"}, {"MES": "07/2025", "QTD": "39", "VALOR_TOTAL": "94931.61", "VALOR_VENCIDO": "94931.61", "VALOR_A_VENCER": "0"}, {"MES": "08/2025", "QTD": "53", "VALOR_TOTAL": "120979.47", "VALOR_VENCIDO": "120979.47", "VALOR_A_VENCER": "0"}, {"MES": "09/2025", "QTD": "40", "VALOR_TOTAL": "89009.20", "VALOR_VENCIDO": "89009.20", "VALOR_A_VENCER": "0"}, {"MES": "10/2025", "QTD": "51", "VALOR_TOTAL": "122539.56", "VALOR_VENCIDO": "122539.56", "VALOR_A_VENCER": "0"}, {"MES": "11/2025", "QTD": "74", "VALOR_TOTAL": "143013.05", "VALOR_VENCIDO": "143013.05", "VALOR_A_VENCER": "0"}, {"MES": "12/2025", "QTD": "148", "VALOR_TOTAL": "383892.80", "VALOR_VENCIDO": "383892.80", "VALOR_A_VENCER": "0"}, {"MES": "01/2026", "QTD": "55", "VALOR_TOTAL": "117031.39", "VALOR_VENCIDO": "117031.39", "VALOR_A_VENCER": "0"}, {"MES": "02/2026", "QTD": "73", "VALOR_TOTAL": "217114.32", "VALOR_VENCIDO": "217114.32", "VALOR_A_VENCER": "0"}, {"MES": "03/2026", "QTD": "95", "VALOR_TOTAL": "153139.53", "VALOR_VENCIDO": "153139.53", "VALOR_A_VENCER": "0"}, {"MES": "04/2026", "QTD": "126", "VALOR_TOTAL": "201695.40", "VALOR_VENCIDO": "201695.40", "VALOR_A_VENCER": "0"}, {"MES": "05/2026", "QTD": "129", "VALOR_TOTAL": "296849.21", "VALOR_VENCIDO": "296849.21", "VALOR_A_VENCER": "0"}, {"MES": "06/2026", "QTD": "121", "VALOR_TOTAL": "284977.85", "VALOR_VENCIDO": "284977.85", "VALOR_A_VENCER": "0"}, {"MES": "07/2026", "QTD": "466", "VALOR_TOTAL": "1397483.54", "VALOR_VENCIDO": "1397483.54", "VALOR_A_VENCER": "0"}, {"MES": "08/2026", "QTD": "19433", "VALOR_TOTAL": "34931024.66", "VALOR_VENCIDO": "0", "VALOR_A_VENCER": "34931024.66"}, {"MES": "09/2026", "QTD": "91", "VALOR_TOTAL": "288499.71", "VALOR_VENCIDO": "0", "VALOR_A_VENCER": "288499.71"}];
-var KPI           = {"apr_total": 27415047.39, "apr_vencido": 22056.6, "apr_pct": 0.1, "apr_titulos": 664, "apd_total": 3042426.46, "apd_vencido": 1536185.04, "apd_pct": 50.5, "apd_titulos": 499, "fat_br": 334035267.38, "fat_lr": 301855195.66, "fat_ton": 15382.62, "fat_pm": 21.72, "nfe_qtd": 3, "ar_total": 45880101.77, "ar_vencido": 11014253.47, "ar_avencer": 34865848.3, "ar_pct": 24.0, "ar_titulos": 23743, "ar_clientes": 10629, "dre_rec": 0, "dre_desp": 0, "dre_res": 0, "pmr_dias": 15.3, "pmp_dias": 25.1, "ciclo_fin": -9.8, "ik_total": 41976276.64, "ik_vencido": 6756752.27, "ik_pct": 16.1, "ik_clientes": 10178, "ik_titulos": 22761, "ik_tit_venc": 3237, "atualizado": "04/08/2026 17:03"};
+var KPI           = {"apr_total": 27415047.39, "apr_vencido": 22056.6, "apr_pct": 0.1, "apr_titulos": 664, "apd_total": 3042426.46, "apd_vencido": 1536185.04, "apd_pct": 50.5, "apd_titulos": 499, "fat_br": 334035267.38, "fat_lr": 301855195.66, "fat_ton": 15382.62, "fat_pm": 21.72, "nfe_qtd": 3, "ar_total": 45880101.77, "ar_vencido": 11014253.47, "ar_avencer": 34865848.3, "ar_pct": 24.0, "ar_titulos": 23743, "ar_clientes": 10629, "dre_rec": 0, "dre_desp": 0, "dre_res": 0, "pmr_dias": 15.3, "pmp_dias": 25.1, "ciclo_fin": -9.8, "ik_total": 41976276.64, "ik_vencido": 6756752.27, "ik_pct": 16.1, "ik_clientes": 10178, "ik_titulos": 22761, "ik_tit_venc": 3237, "atualizado": "04/08/2026 17:27"};
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function brl(v,d=0){v=parseFloat(v)||0;if(v>=1e9)return'R$ '+(v/1e9).toFixed(1)+'B';if(v>=1e6)return'R$ '+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'R$ '+(v/1e3).toFixed(0)+'K';return'R$ '+v.toFixed(d);}
@@ -694,6 +713,35 @@ function aplicarFiltroBaixas(){
   document.getElementById('baixa-de').value=iso;
   document.getElementById('baixa-ate').value=iso;
   aplicarFiltroBaixas();
+})();
+
+// ── Recebimentos Baixados no Periodo (AR, filtro data de baixa, default = ultimos 30 dias) ──
+function aplicarFiltroRecBaixas(){
+  const de=document.getElementById('recbaixa-de').value;
+  const ate=document.getElementById('recbaixa-ate').value;
+  const deD=de?new Date(de+'T00:00:00'):null;
+  const ateD=ate?new Date(ate+'T23:59:59'):null;
+  const filtrado=(ACOMP_BAIXAS||[]).filter(r=>{
+    if(r.TIPO!=='AR') return false;
+    const d=parseBR(r.DATA_BAIXA);
+    if(!d) return false;
+    if(deD && d<deD) return false;
+    if(ateD && d>ateD) return false;
+    return true;
+  });
+  const qtd=filtrado.reduce((s,r)=>s+parseFloat(r.QTD||0),0);
+  const val=filtrado.reduce((s,r)=>s+parseFloat(r.VALOR||0),0);
+  document.getElementById('k-recbaixa-qtd').textContent=Math.floor(qtd);
+  document.getElementById('k-recbaixa-sub').textContent='títulos baixados';
+  document.getElementById('k-recbaixa-val').textContent=brl(val,2);
+}
+(function(){
+  const trintaAtras=new Date();
+  trintaAtras.setDate(trintaAtras.getDate()-30);
+  const hoje=new Date();
+  document.getElementById('recbaixa-de').value=toISO(trintaAtras);
+  document.getElementById('recbaixa-ate').value=toISO(hoje);
+  aplicarFiltroRecBaixas();
 })();
 
 // ── Creditos Nao Identificados (filtro data de movimentacao, default = ultimos 30 dias) ──
